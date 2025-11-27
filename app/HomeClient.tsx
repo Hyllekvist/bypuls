@@ -8,6 +8,7 @@ import { DKMapHeat } from "./components/DKMapHeat";
 import { MarketStream } from "./components/MarketStream";
 import type { NationalSnapshot } from "../lib/data";
 import { formatNumber, formatPercent } from "../lib/format";
+import styles from "./HomeHero.module.css";
 
 type Props = {
   snapshot: NationalSnapshot;
@@ -21,65 +22,51 @@ export function HomeClient({ snapshot }: Props) {
     <>
       <GlobalHeader />
       <main className="page-inner">
-        <section
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr",
-            gap: 16,
-          }}
-        >
-          <div>
-            <h1
-              style={{
-                fontSize: "32px",
-                lineHeight: 1.1,
-                margin: "4px 0 12px",
-              }}
-            >
+        {/* HERO GRID */}
+        <section className={styles.heroGrid}>
+          {/* Venstre tekstpanel */}
+          <div className={styles.heroText}>
+            <h1 className={styles.heroTitle}>
               Boligmarkedet.
               <br />
               Live. Lokalt.
             </h1>
-            <p className="text-muted" style={{ maxWidth: 360, fontSize: 14 }}>
+            <p className={styles.heroLead}>
               ByPuls måler temperaturen på boligmarkedet i Danmark – baseret på
               real-time data på tværs af kommuner og bydele.
             </p>
+
+            <div className={styles.heroBullets}>
+              <div>
+                <div className={styles.bulletLabel}>National Pulse</div>
+                <div className={styles.bulletValue}>{pulse}</div>
+                <div className={styles.bulletSub}>+{pulseChange} i dag</div>
+              </div>
+              <div>
+                <div className={styles.bulletLabel}>Flow</div>
+                <div className={styles.bulletValue}>{formatNumber(flow)}</div>
+                <div className={styles.bulletSub}>Nye listings denne uge</div>
+              </div>
+            </div>
           </div>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "minmax(0, 1.2fr)",
-              gap: 16,
-            }}
-          >
-            <DKMapHeat variant="national" />
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                marginTop: 12,
-              }}
-            >
-              <PulseGauge value={pulse} delta={pulseChange} />
-            </div>
+          {/* Midterkort + overlay gauge */}
+          <div className={styles.heroMap}>
+            <DKMapHeat
+              variant="national"
+              overlay={<PulseGauge value={pulse} delta={pulseChange} />}
+            />
+          </div>
+
+          {/* Højre Market Stream panel */}
+          <div className={styles.heroStream}>
             <MarketStream items={stream} />
           </div>
         </section>
 
-        <section
-          style={{
-            marginTop: 24,
-            display: "grid",
-            gridTemplateColumns: "1fr",
-            gap: 12,
-          }}
-        >
-          <MetricCard
-            label="Puls"
-            value={String(pulse)}
-            sub={`+${pulseChange} i dag`}
-          />
+        {/* METRICS-RAD */}
+        <section className={styles.metricsRow}>
+          <MetricCard label="Puls" value={String(pulse)} sub={`+${pulseChange} i dag`} />
           <MetricCard
             label="Flow"
             value={formatNumber(flow)}
@@ -92,37 +79,15 @@ export function HomeClient({ snapshot }: Props) {
           />
         </section>
 
-        <section
-          style={{
-            marginTop: 28,
-            display: "grid",
-            gridTemplateColumns: "1fr",
-            gap: 16,
-          }}
-        >
+        {/* TOP MOVERS */}
+        <section className={styles.moversRow}>
           <div>
-            <h2 style={{ fontSize: 16, marginBottom: 8 }}>
-              Top kommuner i stigning
-            </h2>
-            <ul
-              style={{
-                listStyle: "none",
-                padding: 0,
-                margin: 0,
-                fontSize: 14,
-              }}
-            >
+            <h2 className={styles.moversTitle}>Top kommuner i stigning</h2>
+            <ul className={styles.moversList}>
               {hotspots.map((h) => (
-                <li
-                  key={h.name}
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    padding: "6px 0",
-                  }}
-                >
+                <li key={h.name} className={styles.moversItem}>
                   <span>{h.name}</span>
-                  <span style={{ color: "#bbf7d0" }}>
+                  <span className={styles.moversUp}>
                     {h.pulse} (+{h.delta})
                   </span>
                 </li>
@@ -130,28 +95,12 @@ export function HomeClient({ snapshot }: Props) {
             </ul>
           </div>
           <div>
-            <h2 style={{ fontSize: 16, marginBottom: 8 }}>
-              Top kommuner i fald
-            </h2>
-            <ul
-              style={{
-                listStyle: "none",
-                padding: 0,
-                margin: 0,
-                fontSize: 14,
-              }}
-            >
+            <h2 className={styles.moversTitle}>Top kommuner i fald</h2>
+            <ul className={styles.moversList}>
               {coolspots.map((c) => (
-                <li
-                  key={c.name}
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    padding: "6px 0",
-                  }}
-                >
+                <li key={c.name} className={styles.moversItem}>
                   <span>{c.name}</span>
-                  <span style={{ color: "#fecaca" }}>
+                  <span className={styles.moversDown}>
                     {c.pulse} ({c.delta})
                   </span>
                 </li>
