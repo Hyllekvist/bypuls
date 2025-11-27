@@ -38,7 +38,12 @@ export type DistrictSnapshot = {
   details: string;
 };
 
-export const MUNICIPALITIES = [
+// Gør MUNICIPALITIES til et “almindeligt” typed array, så includes() ikke fejler
+export const MUNICIPALITIES: {
+  slug: string;
+  name: string;
+  districts: string[];
+}[] = [
   {
     slug: "koebenhavn",
     name: "København",
@@ -55,7 +60,7 @@ export const MUNICIPALITIES = [
     name: "Aarhus",
     districts: ["indre-by", "trige"],
   },
-] as const;
+];
 
 export async function getNationalSnapshot(): Promise<NationalSnapshot> {
   // TODO: replace with real data / Supabase
@@ -139,7 +144,7 @@ export async function getDistrictSnapshot(
   districtSlug: string,
 ): Promise<DistrictSnapshot | null> {
   const muni = MUNICIPALITIES.find((m) => m.slug === municipalitySlug);
-  if (!muni || !muni.districts.includes(districtSlug as any)) return null;
+  if (!muni || !muni.districts.includes(districtSlug)) return null;
 
   return {
     municipalitySlug,
