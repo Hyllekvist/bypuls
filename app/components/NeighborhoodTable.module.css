@@ -1,0 +1,40 @@
+.table {
+  border-radius: var(--radius-lg);
+  background: radial-gradient(circle at top left, #020617 0, #020617 55%, #000 100%);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  padding: 12px 12px 10px;
+  box-shadow: var(--shadow-soft);
+  font-size: 13px;
+}
+
+.head {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  column-gap: 10px;
+  padding: 4px 2px 8px;
+  color: var(--muted);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  column-gap: 10px;
+  padding: 6px 2px;
+  border-radius: 10px;
+}
+
+.row:nth-child(odd) {
+  background: rgba(15, 23, 42, 0.6);
+}
+
+.name {
+  font-weight: 500;
+}
+
+.badgeUp {
+  color: #bbf7d0;
+}
+
+.badgeDown {
+  color: #fecaca;
+}

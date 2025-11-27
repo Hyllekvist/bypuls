@@ -1,0 +1,54 @@
+.wrapper {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  border-radius: 999px;
+  background: radial-gradient(circle at top, #16a34a33 0, #020617 55%);
+  box-shadow: 0 0 80px rgba(34, 197, 94, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring {
+  position: absolute;
+  inset: 16px;
+  border-radius: 999px;
+  border: 10px solid transparent;
+  background:
+    conic-gradient(
+      from 220deg,
+      #22c55e,
+      #22d3ee,
+      #22c55e
+    );
+  mask:
+    radial-gradient(farthest-side, transparent calc(100% - 14px), black 0);
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+}
+
+.value {
+  font-size: 44px;
+  font-weight: 700;
+}
+
+.delta {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #bbf7d0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}

@@ -1,0 +1,53 @@
+.wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  backdrop-filter: blur(22px);
+  background: radial-gradient(circle at top left, #020617 0, #020617ee 45%, #020617f5 100%);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brandText {
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  font-size: 12px;
+}
+
+.nav {
+  display: none;
+  gap: 16px;
+  font-size: 14px;
+}
+
+.navLink {
+  color: var(--muted);
+  transition: color 0.16s ease;
+}
+
+.navLinkActive {
+  color: #f9fafb;
+}
+
+@media (min-width: 768px) {
+  .inner {
+    padding: 14px 24px;
+  }
+  .nav {
+    display: flex;
+  }
+}

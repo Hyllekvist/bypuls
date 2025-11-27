@@ -1,0 +1,19 @@
+.mapShell {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  background: radial-gradient(circle at center, #0f172a 0, #020617 55%);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: var(--shadow-soft);
+  min-height: 260px;
+}
+
+.placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 13px;
+}

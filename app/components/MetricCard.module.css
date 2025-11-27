@@ -1,0 +1,33 @@
+.card {
+  border-radius: var(--radius-lg);
+  background: radial-gradient(circle at top left, #020617 0, #020617 55%, #000 100%);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: var(--shadow-soft);
+  padding: 14px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+}
+
+.valueRow {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.value {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.sub {
+  font-size: 13px;
+  color: var(--muted);
+}
