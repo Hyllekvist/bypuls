@@ -10,14 +10,16 @@ export function DKMapHeat({ variant = "national", overlay }: Props) {
     variant === "national" ? "Danmark – nationalt heatmap" : "Kommunekort";
 
   return (
-    <div className={styles.mapShell} aria-label={label}>
-      {/* baggrunds-glow og “kort” */}
-      <div className={styles.gradientLayer} />
-      <div className={styles.gridLayer} />
-      <div className={styles.hotspotsLayer} />
+    <section className={styles.card} aria-label={label}>
+      <div className={styles.canvas}>
+        <div className={styles.gradientLayer} />
+        <div className={styles.gridLayer} />
+        <div className={styles.dkShape} />
+        <div className={styles.hotspotsLayer} />
+        <div className={styles.ekgLayer} />
+      </div>
 
-      {/* overlay (PulseGauge) */}
       {overlay && <div className={styles.overlay}>{overlay}</div>}
-    </div>
+    </section>
   );
 }
