@@ -125,3 +125,62 @@
     min-height: 260px;
   }
 }
+
+.card {
+  position: relative;
+  border-radius: 28px;
+  overflow: hidden;
+  min-height: 220px;
+  background: #020617;
+  box-shadow:
+    0 22px 60px rgba(15, 23, 42, 0.55),
+    0 0 30px rgba(34, 197, 94, 0.18);
+}
+
+.canvas {
+  position: relative;
+  min-height: 220px;
+}
+
+/* grid-linjer i hele kort-cardet */
+.gridLayer {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+      to right,
+      rgba(15, 23, 42, 0.9) 1px,
+      transparent 1px
+    ),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.9) 1px, transparent 1px);
+  background-size: 52px 52px;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* overlay til gauge er som tidligere */
+.overlay {
+  position: absolute;
+  right: clamp(18px, 5vw, 40px);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+@media (max-width: 959px) {
+  .overlay {
+    position: static;
+    transform: none;
+    margin: 16px auto 8px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .canvas {
+    min-height: 200px;
+  }
+}
+
+@media (min-width: 960px) {
+  .canvas {
+    min-height: 260px;
+  }
+}
