@@ -1,8 +1,6 @@
-// app/components/ByPulsMap.tsx
 "use client";
 
 import styles from "./ByPulsMap.module.css";
-import { MUNICIPALITIES } from "../../lib/data";
 
 type Props = {
   selectedMunicipality?: string;
@@ -10,58 +8,17 @@ type Props = {
 };
 
 /**
- * ByPulsMap
- *
- * Interaktivt DK-kort baseret på SVG.
- * - Klar til 98 kommuner (én <path> pr. kommune)
- * - selectedMunicipality highlightes
- * - onSelectMunicipality kaldes ved klik
- *
- * LIGE NU bruger vi kun få dummy-paths som placeholders.
- * Du kan senere indsætte rigtigt kommune-SVG ved at udskifte
- * MUNICIPALITY_PATHS-arrayet.
+ * ByPulsMap v2
+ * - Tegner en DK-silhuet (approx) som SVG
+ * - Neon edge + indre glow
+ * - Hotspots placeret som større byer
+ * - Klar til senere at få rigtige kommune-paths ovenpå
  */
 
-type MunicipalityPath = {
-  slug: string;
-  name: string;
-  d: string;
-};
-
-const MUNICIPALITY_PATHS: MunicipalityPath[] = [
-  // !!! PLACEHOLDER-GEOMETRI !!!
-  // Disse er kun illustrative. Senere skal de erstattes med
-  // rigtige kommune-paths (fx genereret fra GeoJSON).
-  {
-    slug: "koebenhavn",
-    name: "København",
-    d: "M210 260 C 210 220, 250 210, 270 230 C 290 250, 290 290, 270 310 C 250 330, 220 330, 205 310 C 190 290, 190 280, 210 260 Z",
-  },
-  {
-    slug: "aarhus",
-    name: "Aarhus",
-    d: "M190 190 C 200 170, 225 165, 240 175 C 255 185, 260 210, 250 225 C 240 240, 215 245, 200 235 C 185 225, 180 210, 190 190 Z",
-  },
-  {
-    slug: "odense",
-    name: "Odense",
-    d: "M150 300 C 160 285, 180 280, 195 288 C 210 296, 215 315, 208 328 C 200 342, 180 348, 166 342 C 152 335, 140 320, 150 300 Z",
-  },
-  {
-    slug: "aalborg",
-    name: "Aalborg",
-    d: "M200 130 C 215 120, 235 120, 248 130 C 260 140, 262 160, 252 172 C 242 184, 220 188, 206 180 C 192 172, 185 150, 200 130 Z",
-  },
-  {
-    slug: "esbjerg",
-    name: "Esbjerg",
-    d: "M110 260 C 120 245, 140 240, 155 248 C 170 255, 176 272, 170 286 C 163 300, 144 308, 130 305 C 116 300, 100 280, 110 260 Z",
-  },
-];
-
 export function ByPulsMap({ selectedMunicipality, onSelectMunicipality }: Props) {
-  const handleClick = (slug: string) => {
-    if (onSelectMunicipality) onSelectMunicipality(slug);
+  // Vi bruger slug senere til at farve enkelte områder; lige nu kun nationalt view
+  const handleClick = () => {
+    if (onSelectMunicipality) onSelectMunicipality("koebenhavn");
   };
 
   return (
@@ -69,71 +26,85 @@ export function ByPulsMap({ selectedMunicipality, onSelectMunicipality }: Props)
       className={styles.svg}
       viewBox="0 0 400 600"
       role="img"
-      aria-label="Danmarkskort opdelt i kommuner"
+      aria-label="Danmarkskort med aktivitets-heatmap"
+      onClick={handleClick}
     >
-      {/* Baggrunds-glow for hele DK */}
       <defs>
-        <radialGradient id="bypuls-glow" cx="50%" cy="55%" r="60%">
-          <stop offset="0%" stopColor="#22c55e" stopOpacity="0.8" />
-          <stop offset="45%" stopColor="#22c55e" stopOpacity="0.15" />
+        {/* indre fill-gradiant i DK */}
+        <radialGradient id="dk-fill" cx="50%" cy="55%" r="60%">
+          <stop offset="0%" stopColor="#22c55e" stopOpacity="0.9" />
+          <stop offset="40%" stopColor="#22c55e" stopOpacity="0.2" />
           <stop offset="70%" stopColor="#0ea5e9" stopOpacity="0.18" />
           <stop offset="100%" stopColor="#020617" stopOpacity="0" />
         </radialGradient>
 
-        <filter id="bypuls-softGlow" x="-40%" y="-40%" width="180%" height="180%">
-          <feGaussianBlur stdDeviation="18" result="blur" />
+        {/* soft glow udenom kanten */}
+        <filter id="dk-glow" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur stdDeviation="12" result="blur" />
           <feColorMatrix
             in="blur"
             type="matrix"
-            values="0 0 0 0 0.15  0 0 0 0 0.95  0 0 0 0 0.7  0 0 0 0.9 0"
+            values="
+              0 0 0 0 0.15
+              0 0 0 0 0.95
+              0 0 0 0 0.7
+              0 0 0 0.8 0
+            "
           />
         </filter>
       </defs>
 
-      {/* DK-"silhuet" baggrund */}
-      <g className={styles.dkBase}>
+      {/* baggrunds-glow */}
+      <g className={styles.glow}>
+        <ellipse cx="210" cy="280" rx="135" ry="190" fill="url(#dk-fill)" />
         <ellipse
-          cx="220"
-          cy="260"
-          rx="120"
-          ry="170"
-          fill="url(#bypuls-glow)"
-          filter="url(#bypuls-softGlow)"
+          cx="210"
+          cy="280"
+          rx="135"
+          ry="190"
+          fill="none"
+          stroke="#22c55e"
+          strokeWidth="2"
+          filter="url(#dk-glow)"
         />
       </g>
 
-      {/* Kommuner */}
-      <g className={styles.municipalities}>
-        {MUNICIPALITY_PATHS.map((m) => {
-          const isSelected = selectedMunicipality === m.slug;
-          const isKnown = MUNICIPALITIES.some((x) => x.slug === m.slug);
+      {/* DK-silhuet – approx, men læseligt som Danmark */}
+      <path
+        className={styles.dkShape}
+        d="
+          M180 60
+          L205 70 225 95 230 125 225 155
+          L240 190 255 220 270 250 270 280
+          L265 305 255 330 245 350 245 375
+          L240 400 230 420 215 440 205 460
+          L195 485 180 505 160 520 140 525
+          L120 520 110 505 100 480 95 450
+          L90 420 80 390 75 360 72 330
+          L72 300 75 275 80 250
+          L90 230 100 210 110 190
+          L120 170 132 150 140 130
+          L150 110 160 90 170 75
+          Z
+        "
+      />
 
-          return (
-            <path
-              key={m.slug}
-              d={m.d}
-              className={[
-                styles.muni,
-                isSelected ? styles.muniSelected : "",
-                !isKnown ? styles.muniUnknown : "",
-              ]
-                .filter(Boolean)
-                .join(" ")}
-              onClick={() => handleClick(m.slug)}
-              data-slug={m.slug}
-            />
-          );
-        })}
-      </g>
-
-      {/* små hotspots-prikker for stemning */}
+      {/* små hotspots – ca. som byer */}
       <g className={styles.hotspots}>
-        <circle cx="230" cy="270" r="10" />
-        <circle cx="210" cy="220" r="6" />
-        <circle cx="255" cy="230" r="5" />
-        <circle cx="190" cy="300" r="5" />
-        <circle cx="170" cy="260" r="4" />
+        {/* København-område */}
+        <circle cx="235" cy="340" r="8" />
+        {/* Aarhus-område */}
+        <circle cx="210" cy="240" r="7" />
+        {/* Odense-område */}
+        <circle cx="190" cy="320" r="6" />
+        {/* Aalborg-område */}
+        <circle cx="205" cy="170" r="6" />
+        {/* Esbjerg-område */}
+        <circle cx="145" cy="310" r="5" />
       </g>
+
+      {/* diskret grid ovenpå kortet */}
+      <rect className={styles.gridOverlay} x="60" y="90" width="300" height="380" />
     </svg>
   );
 }
