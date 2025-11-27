@@ -22,7 +22,7 @@ export function HomeClient({ snapshot }: Props) {
     <>
       <GlobalHeader />
       <main className="page-inner">
-        {/* HERO GRID */}
+        {/* HERO */}
         <section className={styles.heroGrid}>
           {/* Venstre tekstpanel */}
           <div className={styles.heroText}>
@@ -44,13 +44,15 @@ export function HomeClient({ snapshot }: Props) {
               </div>
               <div>
                 <div className={styles.bulletLabel}>Flow</div>
-                <div className={styles.bulletValue}>{formatNumber(flow)}</div>
+                <div className={styles.bulletValue}>
+                  {formatNumber(flow)}
+                </div>
                 <div className={styles.bulletSub}>Nye listings denne uge</div>
               </div>
             </div>
           </div>
 
-          {/* Midterkort + overlay gauge */}
+          {/* Midterkort + gauge overlay */}
           <div className={styles.heroMap}>
             <DKMapHeat
               variant="national"
@@ -58,13 +60,13 @@ export function HomeClient({ snapshot }: Props) {
             />
           </div>
 
-          {/* Højre Market Stream panel */}
+          {/* Market stream panel */}
           <div className={styles.heroStream}>
             <MarketStream items={stream} />
           </div>
         </section>
 
-        {/* METRICS-RAD */}
+        {/* KPI-cards */}
         <section className={styles.metricsRow}>
           <MetricCard label="Puls" value={String(pulse)} sub={`+${pulseChange} i dag`} />
           <MetricCard
@@ -79,7 +81,7 @@ export function HomeClient({ snapshot }: Props) {
           />
         </section>
 
-        {/* TOP MOVERS */}
+        {/* Top movers */}
         <section className={styles.moversRow}>
           <div>
             <h2 className={styles.moversTitle}>Top kommuner i stigning</h2>
